@@ -497,7 +497,7 @@ class AlbumIdTrack(Resource):
                 db.session.add(track)
                 db.session.commit()
                 return {"id": id_encoded, "album_id": album_id, "name": nombre, "duration": int(duracion), "times_played": reproducciones, "artist": artisturl, "album": albumurl, "self": selfurl},201
-        return {'album':'inexistente'},404
+        return {'album':'inexistente'},422
 
 #api.add_resource(AlbumIdTrack, 'https://tarea2-taller.herokuapp.com/albums/<string:album_id>/tracks')
 api.add_resource(AlbumIdTrack, '/albums/<string:album_id>/tracks')
