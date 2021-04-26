@@ -229,11 +229,23 @@ class ArtistIdAlbum(Resource):
     
     def post(self,artist_id):
         lista = []
+        lista_artista = []
+        lista_id = []
         parser.add_argument('name', action='append')
         parser.add_argument('genre', action='append')
         args = parser.parse_args()
         nombre = args['name'][0]
         genero = args['genre'][0]
+
+        artista = Artist.query.all()
+        for art in artista:
+            lista_artista.append(art.json())
+        for pos in range(len(lista_artista)):
+            identificador = lista_artista[pos]['id']
+            lista_id.append(identificador)
+            if artist_id not in lista_id:
+                return {"artista": "no existe"},422
+
         nombre_a_encriptar = nombre + ':' + artist_id
         id_encoded = b64encode(nombre_a_encriptar.encode()).decode('utf-8')[:22]        
         artisturl = f'https://tarea2-taller.herokuapp.com/artists/{artist_id}'
