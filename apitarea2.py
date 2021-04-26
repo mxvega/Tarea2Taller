@@ -250,7 +250,7 @@ class ArtistIdAlbum(Resource):
         print(lista_id)
         #    if artist_id not in lista_id:
         #        return {"artista": "no existe"},422
-
+        
         nombre = args['name'][0]
         genero = args['genre'][0]
         nombre_a_encriptar = nombre + ':' + artist_id
