@@ -302,9 +302,9 @@ class AlbumNames(Resource):
             identificador_art = lista_id[pos]['artist_id']
             nombre_pos = lista_id[pos]['name']
             genero_pos = lista_id[pos]['genre']            
-            artisturl = f'/artists/{identificador_art}'
-            tracksurl = f'/albums/{identificador}/tracks'
-            selfurl = f'/albums/{identificador}'
+            artisturl = f'https://tarea2-taller.herokuapp.com/artists/{identificador_art}'
+            tracksurl = f'https://tarea2-taller.herokuapp.com/albums/{identificador}/tracks'
+            selfurl = f'https://tarea2-taller.herokuapp.com/albums/{identificador}'
             lista.append({"id": identificador, "artist_id": identificador_art, "name": nombre_pos, "genre": genero_pos, "artist": artisturl, "tracks": tracksurl, "self": selfurl})
         return lista
     
