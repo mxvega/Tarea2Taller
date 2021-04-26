@@ -89,9 +89,14 @@ class ArtistNames(Resource):
     
     def post(self):
         lista = []
+        #print("------------parser antes de add argument", parser.parse_args())
         parser.add_argument('name', action='append')
         parser.add_argument('age', action='append')
+        #print("------------parser despues de add argument", parser.parse_args())
         args = parser.parse_args()
+        #print("---------args",args)
+        if args['name'] == None or args['age'] == None:
+            return {"input": "invalido"},400
         nombre = args['name'][0]
         edad = args['age'][0]
         id_encoded = b64encode(nombre.encode()).decode('utf-8')[:22]        
@@ -110,7 +115,7 @@ class ArtistNames(Resource):
         artista = Artist(id_encoded,nombre,edad)
         db.session.add(artista)
         db.session.commit()
-        return {"id": id_encoded, "name": nombre, "age": edad, "albums": albumsurl, "tracks": tracksurl, "self": selfurl}
+        return {"id": id_encoded, "name": nombre, "age": edad, "albums": albumsurl, "tracks": tracksurl, "self": selfurl},201
 
 #api.add_resource(ArtistNames, 'https://tarea2-taller.herokuapp.com/artists')
 api.add_resource(ArtistNames, '/artists')
@@ -246,7 +251,7 @@ class ArtistIdAlbum(Resource):
         album = Album(id_encoded,artist_id,nombre,genero)
         db.session.add(album)
         db.session.commit()
-        return {"id": id_encoded, "artist_id": artist_id, "name": nombre, "genre": genero, "artist": artisturl, "tracks": tracksurl, "self": selfurl}
+        return {"id": id_encoded, "artist_id": artist_id, "name": nombre, "genre": genero, "artist": artisturl, "tracks": tracksurl, "self": selfurl},201
 
 #api.add_resource(ArtistIdAlbum, 'https://tarea2-taller.herokuapp.com/artists/<string:artist_id>/albums')
 api.add_resource(ArtistIdAlbum, '/artists/<string:artist_id>/albums')
@@ -464,7 +469,7 @@ class AlbumIdTrack(Resource):
                 track = Track(id_encoded,album_id,nombre,duracion,reproducciones)
                 db.session.add(track)
                 db.session.commit()
-                return {"id": id_encoded, "album_id": album_id, "name": nombre, "duration": int(duracion), "times_played": reproducciones, "artist": artisturl, "album": albumurl, "self": selfurl}
+                return {"id": id_encoded, "album_id": album_id, "name": nombre, "duration": int(duracion), "times_played": reproducciones, "artist": artisturl, "album": albumurl, "self": selfurl},201
         return {'album':'inexistente'},404
 
 #api.add_resource(AlbumIdTrack, 'https://tarea2-taller.herokuapp.com/albums/<string:album_id>/tracks')
