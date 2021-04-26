@@ -237,20 +237,15 @@ class ArtistIdAlbum(Resource):
 
         if args['name'] == None or args['genre'] == None:
             return {"input": "invalido"},400
-        
         artista = Artist.query.all()
         if len(artista) == 0:
             return {"artista": "no existe"},422
-
         for arti in artista:
             lista_artista.append(arti.json())
         for pos in range(len(lista_artista)):
             identificador_arti = lista_artista[pos]['id']
             lista_id.append(identificador_arti)
         print(lista_id)
-        #    if artist_id not in lista_id:
-        #        return {"artista": "no existe"},422
-        
         nombre = args['name'][0]
         genero = args['genre'][0]
         nombre_a_encriptar = nombre + ':' + artist_id
