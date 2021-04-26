@@ -229,6 +229,33 @@ class ArtistIdAlbum(Resource):
     
     def post(self,artist_id):
         lista = []
+        lista_artista = []
+        lista_id = []
+        print("antes de ciclo")
+        print(artist_id)
+        artista = Artist.query.all()
+        print("antes de artista")
+        print(artista)
+        print("despues de artista")
+        if len(artista) == 0:
+            return {"artista": "no existe"},422
+        for arti in artista:
+            lista_artista.append(arti.json())
+            print("antes de lista_artista")
+            print(lista_artista)
+            print("despues de lista_artista")
+
+
+        for pos in range(len(lista_artista)):
+            identificador_arti = lista_artista[pos]['id']
+            lista_id.append(identificador_arti)
+            print(lista_id)
+            if artist_id not in lista_id:
+                print("422")
+                return {"artista": "no existe"},422
+        print("despues de ciclo")
+
+
         parser.add_argument('name', action='append')
         parser.add_argument('genre', action='append')
         args = parser.parse_args()
