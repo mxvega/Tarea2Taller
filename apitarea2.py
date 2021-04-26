@@ -237,14 +237,14 @@ class ArtistIdAlbum(Resource):
         nombre = args['name'][0]
         genero = args['genre'][0]
 
-        artista = Artist.query.all()
-        for art in artista:
-            lista_artista.append(art.json())
-        for pos in range(len(lista_artista)):
-            identificador = lista_artista[pos]['id']
-            lista_id.append(identificador)
-            if artist_id not in lista_id:
-                return {"artista": "no existe"},422
+        #artista = Artist.query.all()
+        #for art in artista:
+        #    lista_artista.append(art.json())
+        #for pos in range(len(lista_artista)):
+        #    identificador = lista_artista[pos]['id']
+        #    lista_id.append(identificador)
+        #    if artist_id not in lista_id:
+        #        return {"artista": "no existe"},422
 
         nombre_a_encriptar = nombre + ':' + artist_id
         id_encoded = b64encode(nombre_a_encriptar.encode()).decode('utf-8')[:22]        
