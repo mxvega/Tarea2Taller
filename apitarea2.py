@@ -231,6 +231,13 @@ class ArtistIdAlbum(Resource):
         lista = []
         lista_artista = []
         lista_id = []
+        parser.add_argument('name', action='append')
+        parser.add_argument('genre', action='append')
+        args = parser.parse_args()
+
+        if args['name'] == None or args['genre'] == None:
+            return {"input": "invalido"},400
+        
         print("antes de ciclo")
         print(artist_id)
         artista = Artist.query.all()
@@ -256,9 +263,6 @@ class ArtistIdAlbum(Resource):
         print("despues de ciclo")
 
 
-        parser.add_argument('name', action='append')
-        parser.add_argument('genre', action='append')
-        args = parser.parse_args()
         nombre = args['name'][0]
         genero = args['genre'][0]
         nombre_a_encriptar = nombre + ':' + artist_id
