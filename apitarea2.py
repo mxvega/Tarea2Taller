@@ -242,14 +242,14 @@ class ArtistIdAlbum(Resource):
         if len(artista) == 0:
             return {"artista": "no existe"},422
         
-#        for arti in artista:
-#            lista_artista.append(arti.json())
-#        for pos in range(len(lista_artista)):
-#            identificador_arti = lista_artista[pos]['id']
-#            lista_id.append(identificador_arti)
-#            print(lista_id)
-#            if artist_id not in lista_id:
-#                return {"artista": "no existe"},422
+        for arti in artista:
+            lista_artista.append(arti.json())
+        for pos in range(len(lista_artista)):
+            identificador_arti = lista_artista[pos]['id']
+            lista_id.append(identificador_arti)
+            print(lista_id)
+            if artist_id not in lista_id:
+                return {"artista": "no existe"},422
 
         nombre = args['name'][0]
         genero = args['genre'][0]
@@ -267,6 +267,16 @@ class ArtistIdAlbum(Resource):
             genero_pos = lista[pos]['genre']
             if identificador == id_encoded:
                 return {"id": identificador, "artist_id": artist_id, "name": nombre_pos, "genre": genero_pos, "artist": artisturl, "tracks": tracksurl, "self": selfurl},409
+            #else:
+            #    artista = Artist.query.all()
+            #    for arti in artista:
+            #        lista_artista.append(arti.json())
+            #    for pos in range(len(lista_artista)):
+            #        identificador_arti = lista_artista[pos]['id']
+            #        lista_id.append(identificador_arti)
+            #        print(lista_id)
+            #        if artist_id not in lista_id:
+            #            return {"artista": "no existe"},422
         album = Album(id_encoded,artist_id,nombre,genero)
         db.session.add(album)
         db.session.commit()
