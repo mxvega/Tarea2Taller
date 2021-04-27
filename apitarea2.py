@@ -438,12 +438,13 @@ class AlbumIdTrack(Resource):
         args = parser.parse_args()
 
         if args['name'] == None or args['duration'] == None:
-            return {"input": "invalido"},400
-        
+            return {"input": "invalido"},400    
+        artista = Artist.query.all()
+        if len(artista) == 0:
+            return {"artista": "no existe"},422        
         albumcito = Album.query.all()
         if len(albumcito) == 0:
             return {"album": "no existe"},422
-
 
         nombre = args['name'][0]
         duracion = args['duration'][0]
