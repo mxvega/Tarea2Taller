@@ -433,6 +433,8 @@ class AlbumIdTrack(Resource):
         lista = []
         lista_artista = []
         lista_final = []
+        lista_album = []
+        lista_id = []
         parser.add_argument('name', action='append')
         parser.add_argument('duration', action='append')
         args = parser.parse_args()
@@ -446,60 +448,66 @@ class AlbumIdTrack(Resource):
         if len(albumcito) == 0:
             return {"album": "no existe"},422
 
-        nombre = args['name'][0]
-        duracion = args['duration'][0]
-        reproducciones = 0
-        nombre_a_encriptar = nombre + ':' + album_id
-        id_encoded = b64encode(nombre_a_encriptar.encode()).decode('utf-8')[:22]  
-        nom_artista_id = ""      
-        album_artista = Album.query.all()
-        for alb_art in album_artista:
-            lista_artista.append(alb_art.json())
-        for pos in range(len(lista_artista)):
-            nombre_id = lista_artista[pos]['name']
-            artista_id = lista_artista[pos]['artist_id']
-            nombre_encriptar = nombre_id + ':' + artista_id
-            id_encode = b64encode(nombre_encriptar.encode()).decode('utf-8')[:22]
-            if id_encode == album_id:
-                nom_artista_id = artista_id
-        artisturl = f'https://tarea2-taller.herokuapp.com/artists/{nom_artista_id}'
-        albumurl = f'https://tarea2-taller.herokuapp.com/albums/{album_id}'
-        selfurl = f'https://tarea2-taller.herokuapp.com/tracks/{id_encoded}'
-        arts = Track.query.all()
-        for art in arts:
-            lista.append(art.json())
-        for pos in range(len(lista)):
-            identificador = lista[pos]['id']
-            album_pos = lista[pos]['album_id']
-            nombre_pos = lista[pos]['name']
-            duration_pos = lista[pos]['duration']
-            times_pos = lista[pos]['times_played']
-            if identificador == id_encoded:
-                albumurl = f'https://tarea2-taller.herokuapp.com/albums/{album_pos}'
-                selfurl = f'https://tarea2-taller.herokuapp.com/tracks/{identificador}'
-                for alb_art in album_artista:
-                    lista_artista.append(alb_art.json())
-                for pos in range(len(lista_artista)):
-                    nombre_id = lista_artista[pos]['name']
-                    artista_id = lista_artista[pos]['artist_id']
-                    nombre_encriptar = nombre_id + ':' + artista_id
-                    id_encode = b64encode(nombre_encriptar.encode()).decode('utf-8')[:22]
-                    if id_encode == album_pos:
-                        artisturl = f'https://tarea2-taller.herokuapp.com/artists/{artista_id}'
-                        return {"id": identificador, "album_id": album_pos, "name": nombre_pos, "duration": int(duration_pos), "times_played": times_pos, "artist": artisturl, "album": albumurl, "self": selfurl},409
-        album_final = Album.query.all()
-        for alb_art in album_final:
-            lista_final.append(alb_art.json())
-        for pos in range(len(lista_final)):
-            nombre_id = lista_final[pos]['name']
-            artista_id = lista_final[pos]['artist_id']
-            nombre_encriptar = nombre_id + ':' + artista_id
-            id_encode = b64encode(nombre_encriptar.encode()).decode('utf-8')[:22]
-            if id_encode == album_id:
-                track = Track(id_encoded,album_id,nombre,duracion,reproducciones)
-                db.session.add(track)
-                db.session.commit()
-                return {"id": id_encoded, "album_id": album_id, "name": nombre, "duration": int(duracion), "times_played": reproducciones, "artist": artisturl, "album": albumurl, "self": selfurl},201
+        for arti in albumcito:
+            lista_album.append(arti.json())
+        for pos in range(len(lista_album)):
+            identificador_arti = lista_album[pos]['id']
+            lista_id.append(identificador_arti)
+        if album_id in lista_id:        
+            nombre = args['name'][0]
+            duracion = args['duration'][0]
+            reproducciones = 0
+            nombre_a_encriptar = nombre + ':' + album_id
+            id_encoded = b64encode(nombre_a_encriptar.encode()).decode('utf-8')[:22]  
+            nom_artista_id = ""      
+            album_artista = Album.query.all()
+            for alb_art in album_artista:
+                lista_artista.append(alb_art.json())
+            for pos in range(len(lista_artista)):
+                nombre_id = lista_artista[pos]['name']
+                artista_id = lista_artista[pos]['artist_id']
+                nombre_encriptar = nombre_id + ':' + artista_id
+                id_encode = b64encode(nombre_encriptar.encode()).decode('utf-8')[:22]
+                if id_encode == album_id:
+                    nom_artista_id = artista_id
+            artisturl = f'https://tarea2-taller.herokuapp.com/artists/{nom_artista_id}'
+            albumurl = f'https://tarea2-taller.herokuapp.com/albums/{album_id}'
+            selfurl = f'https://tarea2-taller.herokuapp.com/tracks/{id_encoded}'
+            arts = Track.query.all()
+            for art in arts:
+                lista.append(art.json())
+            for pos in range(len(lista)):
+                identificador = lista[pos]['id']
+                album_pos = lista[pos]['album_id']
+                nombre_pos = lista[pos]['name']
+                duration_pos = lista[pos]['duration']
+                times_pos = lista[pos]['times_played']
+                if identificador == id_encoded:
+                    albumurl = f'https://tarea2-taller.herokuapp.com/albums/{album_pos}'
+                    selfurl = f'https://tarea2-taller.herokuapp.com/tracks/{identificador}'
+                    for alb_art in album_artista:
+                        lista_artista.append(alb_art.json())
+                    for pos in range(len(lista_artista)):
+                        nombre_id = lista_artista[pos]['name']
+                        artista_id = lista_artista[pos]['artist_id']
+                        nombre_encriptar = nombre_id + ':' + artista_id
+                        id_encode = b64encode(nombre_encriptar.encode()).decode('utf-8')[:22]
+                        if id_encode == album_pos:
+                            artisturl = f'https://tarea2-taller.herokuapp.com/artists/{artista_id}'
+                            return {"id": identificador, "album_id": album_pos, "name": nombre_pos, "duration": int(duration_pos), "times_played": times_pos, "artist": artisturl, "album": albumurl, "self": selfurl},409
+            album_final = Album.query.all()
+            for alb_art in album_final:
+                lista_final.append(alb_art.json())
+            for pos in range(len(lista_final)):
+                nombre_id = lista_final[pos]['name']
+                artista_id = lista_final[pos]['artist_id']
+                nombre_encriptar = nombre_id + ':' + artista_id
+                id_encode = b64encode(nombre_encriptar.encode()).decode('utf-8')[:22]
+                if id_encode == album_id:
+                    track = Track(id_encoded,album_id,nombre,duracion,reproducciones)
+                    db.session.add(track)
+                    db.session.commit()
+                    return {"id": id_encoded, "album_id": album_id, "name": nombre, "duration": int(duracion), "times_played": reproducciones, "artist": artisturl, "album": albumurl, "self": selfurl},201
         return {'album':'inexistente'},422
 
 #api.add_resource(AlbumIdTrack, 'https://tarea2-taller.herokuapp.com/albums/<string:album_id>/tracks')
