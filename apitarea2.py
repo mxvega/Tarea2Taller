@@ -235,7 +235,6 @@ class ArtistIdAlbum(Resource):
         parser.add_argument('name', action='append')
         parser.add_argument('genre', action='append')
         args = parser.parse_args()
-
         if args['name'] == None or args['genre'] == None:
             return {"input": "invalido"},400
         artista = Artist.query.all()
@@ -247,27 +246,28 @@ class ArtistIdAlbum(Resource):
             identificador_arti = lista_artista[pos]['id']
             lista_id.append(identificador_arti)
         print(lista_id)
-        nombre = args['name'][0]
-        genero = args['genre'][0]
-        nombre_a_encriptar = nombre + ':' + artist_id
-        id_encoded = b64encode(nombre_a_encriptar.encode()).decode('utf-8')[:22]        
-        artisturl = f'https://tarea2-taller.herokuapp.com/artists/{artist_id}'
-        tracksurl = f'https://tarea2-taller.herokuapp.com/albums/{id_encoded}/tracks'
-        selfurl = f'https://tarea2-taller.herokuapp.com/albums/{id_encoded}'
-        arts = Album.query.all()
-        for art in arts:
-            lista.append(art.json())
-        for pos in range(len(lista)):
-            identificador = lista[pos]['id']
-            nombre_pos = lista[pos]['name']
-            genero_pos = lista[pos]['genre']
-            if identificador == id_encoded:
-                return {"id": identificador, "artist_id": artist_id, "name": nombre_pos, "genre": genero_pos, "artist": artisturl, "tracks": tracksurl, "self": selfurl},409
-            if artist_id not in lista_id:
-                return {"artista": "no existe"},422
-        album = Album(id_encoded,artist_id,nombre,genero)
-        db.session.add(album)
-        db.session.commit()
+        if artist_id in lista_id:
+            nombre = args['name'][0]
+            genero = args['genre'][0]
+            nombre_a_encriptar = nombre + ':' + artist_id
+            id_encoded = b64encode(nombre_a_encriptar.encode()).decode('utf-8')[:22]        
+            artisturl = f'https://tarea2-taller.herokuapp.com/artists/{artist_id}'
+            tracksurl = f'https://tarea2-taller.herokuapp.com/albums/{id_encoded}/tracks'
+            selfurl = f'https://tarea2-taller.herokuapp.com/albums/{id_encoded}'
+            arts = Album.query.all()
+            for art in arts:
+                lista.append(art.json())
+            for pos in range(len(lista)):
+                identificador = lista[pos]['id']
+                nombre_pos = lista[pos]['name']
+                genero_pos = lista[pos]['genre']
+                if identificador == id_encoded:
+                    return {"id": identificador, "artist_id": artist_id, "name": nombre_pos, "genre": genero_pos, "artist": artisturl, "tracks": tracksurl, "self": selfurl},409
+                if artist_id not in lista_id:
+                    return {"artista": "no existe"},422
+            album = Album(id_encoded,artist_id,nombre,genero)
+            db.session.add(album)
+            db.session.commit()
         if artist_id not in lista_id:
                 return {"artista": "no existe"},422
         return {"id": id_encoded, "artist_id": artist_id, "name": nombre, "genre": genero, "artist": artisturl, "tracks": tracksurl, "self": selfurl},201
