@@ -145,6 +145,7 @@ class ArtistId(Resource):
         lista_album = []
         lista_canciones = []
         artista = Artist.query.all()
+        id_encoded = ''
         for arti in artista:
             lista_artist.append(arti.json())
         for posi in range(len(lista_artist)):
@@ -358,6 +359,7 @@ class AlbumId(Resource):
         lista_album = []
         lista_canciones = []
         albums = Album.query.all()
+        tracks = []
         for art in albums:
             lista.append(art.json())
         for pos in range(len(lista)):
