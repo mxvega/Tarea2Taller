@@ -153,41 +153,44 @@ class ArtistId(Resource):
             if identificador_artista == Id:
                 borrar_artista = Artist.query.get({'Id': Id})
                 lista_artista.append(Id)
-        albums = Album.query.all()
-        for art in albums:
-            lista.append(art.json())
-        for pos in range(len(lista)):
-            identificador = lista[pos]['id']
-            nombre_album = lista[pos]['name']
-            #artista_id = lista[pos]['artist_id']
-            nombre_encriptar = nombre_album + ':' + Id
-            id_encode = b64encode(nombre_encriptar.encode()).decode('utf-8')[:22]
-            if identificador == id_encode:
-                borrar_album = Album.query.get({'Id': identificador}) 
-                lista_album.append(Id)
-                id_encoded = id_encode
-        tracks = Track.query.all()
-        for tra in tracks:
-            lista_track.append(tra.json())
-        for pos in range(len(lista_track)):
-            identificador_track = lista_track[pos]['id']
-            alb_id = lista_track[pos]['album_id']
-            if alb_id == id_encoded:
-                borrar_track = Track.query.get({'Id': identificador_track}) 
-                lista_canciones.append(Id)
-        
+
         if Id in lista_artista:
-            db.session.delete(borrar_artista)
+    
+            albums = Album.query.all()
+            for art in albums:
+                lista.append(art.json())
+            for pos in range(len(lista)):
+                identificador = lista[pos]['id']
+                nombre_album = lista[pos]['name']
+                #artista_id = lista[pos]['artist_id']
+                nombre_encriptar = nombre_album + ':' + Id
+                id_encode = b64encode(nombre_encriptar.encode()).decode('utf-8')[:22]
+                if identificador == id_encode:
+                    borrar_album = Album.query.get({'Id': identificador}) 
+                    lista_album.append(Id)
+                    id_encoded = id_encode
+            tracks = Track.query.all()
+            for tra in tracks:
+                lista_track.append(tra.json())
+            for pos in range(len(lista_track)):
+                identificador_track = lista_track[pos]['id']
+                alb_id = lista_track[pos]['album_id']
+                if alb_id == id_encoded:
+                    borrar_track = Track.query.get({'Id': identificador_track}) 
+                    lista_canciones.append(Id)
+            
+            if Id in lista_artista:
+                db.session.delete(borrar_artista)
 
-        if Id in lista_album:
-            db.session.delete(borrar_album)
+            if Id in lista_album:
+                db.session.delete(borrar_album)
 
-        if Id in lista_canciones:
-            db.session.delete(borrar_track)
+            if Id in lista_canciones:
+                db.session.delete(borrar_track)
 
-        db.session.commit()
-        if Id in lista_album or Id in lista_canciones or Id in lista_artista:
-            return {'artista':'eliminado'},204
+            db.session.commit()
+            if Id in lista_album or Id in lista_canciones or Id in lista_artista:
+                return {'artista':'eliminado'},204
         else:
             return {'artista':'inexistente'},404   
    
