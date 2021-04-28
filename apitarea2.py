@@ -146,6 +146,10 @@ class ArtistId(Resource):
         lista_canciones = []
         artista = Artist.query.all()
         id_encoded = ''
+
+        if len(artista) == 0:
+            return {"artista": "no existe"},404
+
         for arti in artista:
             lista_artist.append(arti.json())
         for posi in range(len(lista_artist)):
@@ -153,9 +157,7 @@ class ArtistId(Resource):
             if identificador_artista == Id:
                 borrar_artista = Artist.query.get({'Id': Id})
                 lista_artista.append(Id)
-
         if Id in lista_artista:
-    
             albums = Album.query.all()
             for art in albums:
                 lista.append(art.json())
@@ -247,7 +249,6 @@ class ArtistIdAlbum(Resource):
         for pos in range(len(lista_artista)):
             identificador_arti = lista_artista[pos]['id']
             lista_id.append(identificador_arti)
-        #print(lista_id)
         if artist_id in lista_id:
             nombre = args['name'][0]
             genero = args['genre'][0]
