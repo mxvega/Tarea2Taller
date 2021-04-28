@@ -576,7 +576,7 @@ class TrackId(Resource):
                         lista_final.append(identificador)
                 lista.append({"id": identificador, "album_id": identificador_art, "name": nombre_pos, "duration": duracion_pos, "times_played": times_pos, "artist": artisturl, "album": albumurl, "self": selfurl})
         if track_id in lista_final:
-            return lista
+            return lista[0]
         else:
             return {'album':'inexistente o sin canciones'},404
 
