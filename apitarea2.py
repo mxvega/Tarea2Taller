@@ -153,10 +153,6 @@ class ArtistId(Resource):
             if identificador_artista == Id:
                 borrar_artista = Artist.query.get({'Id': Id})
                 lista_artista.append(Id)
-
-        if Id not in lista_artista:
-            return {'artista':'inexistente'},404 
-        
         albums = Album.query.all()
         for art in albums:
             lista.append(art.json())
