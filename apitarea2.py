@@ -453,6 +453,7 @@ class AlbumIdTrack(Resource):
         for pos in range(len(lista_album)):
             identificador_arti = lista_album[pos]['id']
             lista_id.append(identificador_arti)
+
         if album_id in lista_id:        
             nombre = args['name'][0]
             duracion = args['duration'][0]
@@ -507,7 +508,7 @@ class AlbumIdTrack(Resource):
                     track = Track(id_encoded,album_id,nombre,duracion,reproducciones)
                     db.session.add(track)
                     db.session.commit()
-                    return {"id": id_encoded, "album_id": album_id, "name": nombre, "duration": int(duracion), "times_played": reproducciones, "artist": artisturl, "album": albumurl, "self": selfurl},201
+                    return {"id": id_encoded, "album_id": album_id, "name": nombre, "duration": duracion, "times_played": reproducciones, "artist": artisturl, "album": albumurl, "self": selfurl},201
         return {'album':'inexistente'},422
 
 #api.add_resource(AlbumIdTrack, 'https://tarea2-taller.herokuapp.com/albums/<string:album_id>/tracks')
