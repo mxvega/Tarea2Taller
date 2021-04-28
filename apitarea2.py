@@ -205,7 +205,6 @@ api.add_resource(HelloWorld, '/')
 
 class ArtistIdAlbum(Resource):
     def get(self,artist_id):
-        print("hola")
         lista = []
         lista_id = []
         lista_id_artista = []
@@ -245,7 +244,7 @@ class ArtistIdAlbum(Resource):
         for pos in range(len(lista_artista)):
             identificador_arti = lista_artista[pos]['id']
             lista_id.append(identificador_arti)
-        print(lista_id)
+        #print(lista_id)
         if artist_id in lista_id:
             nombre = args['name'][0]
             genero = args['genre'][0]
@@ -575,7 +574,7 @@ class TrackId(Resource):
                     if id_encode == identificador_art:
                         artisturl = f'https://tarea2-taller.herokuapp.com/artists/{artista_id}'
                         lista_final.append(identificador)
-                lista.append({"id": identificador, "album_id": identificador_art, "name": nombre_pos, "duration": int(duracion_pos), "times_played": times_pos, "artist": artisturl, "album": albumurl, "self": selfurl})
+                lista.append({"id": identificador, "album_id": identificador_art, "name": nombre_pos, "duration": duracion_pos, "times_played": times_pos, "artist": artisturl, "album": albumurl, "self": selfurl})
         if track_id in lista_final:
             return lista
         else:
@@ -610,7 +609,7 @@ class Play(Resource):
             if identificador == track_id:
                 cancion_suma = Track.query.get({'Id': identificador}) 
                 cancion_suma.times_played += 1
-                print(cancion_suma.times_played)
+                #print(cancion_suma.times_played)
                 db.session.add(cancion_suma)
                 db.session.commit()
                 return {'cancion':'reproducida'},200    
